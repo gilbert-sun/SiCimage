@@ -14,5 +14,6 @@ The features of this SiC algorithm includes:
 
 SiC image is an defect detection method that is widely applied in the area of many SiC data. 
 
-![](https://github.com/gilbert-sun/SiCimage/tree/main/site1.png)
-![](https://github.com/gilbert-sun/SiCimage/tree/main/CREE_0322_141_hist.png)
+
+<img src="site/site1.png" width="800" />
+<img src="site/CREE_0322_141_hist.png" width="800" />
