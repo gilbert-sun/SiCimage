@@ -14,6 +14,13 @@ The features of this SiC algorithm includes:
 
 SiC image is an defect detection method that is widely applied in the area of many SiC data. 
 
-
+## Example Picture demo
 <img src="site/site1.png" width="800" />
 <img src="site/CREE_0322_141_hist.png" width="800" />
+
+## Create Virtual Environment and requirement.txt
+```
+sudo apt-get install python3.8-venv / python3.x-venv
+python -m venv SiCimage
+source SiCimage/bin/activate
+pip3 freeze > requirements.txt
