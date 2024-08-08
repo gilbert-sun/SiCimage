@@ -18,6 +18,17 @@ SiC image is an defect detection method that is widely applied in the area of ma
 <img src="site/site1.png" width="800" />
 <img src="site/CREE_0322_141_hist.png" width="800" />
 
+## Dependencies
+* cv2
+* matplotlib
+* numpy
+  
+## Usage
+```
+python sic_img.py 
+```
+
+
 ## Create Virtual Environment and requirement.txt
 ```
 sudo apt-get install python3.8-venv / python3.x-venv
