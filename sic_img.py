@@ -2,10 +2,27 @@ import this
 
 import cv2,os
 import numpy as np
-# import matplotlib as plt
 import matplotlib.pyplot as plt
 from glob import glob
+from tkinter import *
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image
+
 window_name = None
+
+
+# 加載CSV文件的函數
+def btn_save_file():
+    global gthreshold
+    root = tk.Tk()
+    root.withdraw()  # 隱藏主視窗
+    file = filedialog.asksaveasfile(mode='w', defaultextension=".png", filetypes=(("PNG file", "*.png"),("All Files", "*.*") ))
+    if file:
+        im2 = Image.fromarray(cv2.cvtColor(gthreshold, cv2.IMREAD_GRAYSCALE))
+        im2.save(file.name)
+    return file
+
 
 
 # Set up mouse callback
@@ -16,6 +33,10 @@ def update_for_save(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
         gray = params[1]
         window_name = params[0]
+        if y > button[0] and y < button[1] and x > button[2] and x < button[3]:
+            file = btn_save_file()
+            #print('Clicked on Button!--> ', file.name)
+            return file.name
 
 # 定義調整亮度對比的函式
 def adjust(i, c, b):
@@ -24,51 +45,40 @@ def adjust(i, c, b):
     output = i * (c/100 + 1) - c + b    # 轉換公式
     output = np.clip(output, 0, 255)
     output = np.uint8(output)
-   # cv2.imshow('oxxostudio', output)
-    #cv2.namedWindow(this.s, cv2.WINDOW_GUI_NORMAL)
     cv2.imshow(window_name , output)
 
 # 定義調整threshold的函式
 def adjust1(i,a):
-    # global window_name
-    #print(type(i),type(c), type(b))
+    global gthreshold
     output = i * (a+ 1) -a     # 轉換公式
-    #print("---------> ",output, a)
     output = np.clip(output, 0, 255)
     output = np.uint8(output)
-   # cv2.imshow('oxxostudio', output)
-    #cv2.namedWindow(this.s, cv2.WINDOW_GUI_NORMAL)
     cv2.imshow(window_name , output)
+    #cv2.imwrite("/home/k900/Downloads/DIC-demo-master/test51.png",output)
+    gthreshold = output
 
 # 定義調整亮度函式
 def brightness_fn(val):
     global gray,output1,output4, contrast, brightness,threshold , window_name
     brightness = val - 100
     keydict={"gray":gray,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
-    # print("-------->1: ",window_name)
-    #adjust(gray, contrast, brightness)
     adjust(keydict[window_name], contrast, brightness)
-    #adjust(output4, contrast, brightness)
+
 
 # 定義調整對比度函式
 def contrast_fn(val):
     global gray,output1, output4 ,contrast, brightness,threshold   , window_name
     contrast = val - 100
     keydict={"gray":gray,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
-    # print("-------->2: ",window_name)
-    #adjust(gray, contrast, brightness)
     adjust(keydict[window_name], contrast, brightness)
-   # adjust(output4, contrast, brightness)
+
 
 # 定義調整threshold函式
 def threshold_fn(val):
     global gray,output1, output4 ,contrast, brightness,threshold   , window_name
     threshold = val - 0
     keydict={"gray":gray,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
-    #print("-------->3: ",window_name)
-    #adjust(gray, contrast, brightness)
     adjust1(keydict[window_name], threshold)
-   # adjust(output4, contrast, brightness)
 
 
 if __name__ == '__main__':
@@ -80,6 +90,8 @@ if __name__ == '__main__':
     img_show = True#False
     thresVal = 24
     window_name = None
+    # button dimensions (y1,y2,x1,x2)
+    button = [5,30,5,75]
 
     if (os.path.exists(cur_dir+ dd) == False):
         os.makedirs(cur_dir+ dd)
@@ -103,6 +115,9 @@ if __name__ == '__main__':
             cv2.namedWindow(tmp1[idx],  cv2.WINDOW_NORMAL)
             cv2.setMouseCallback(tmp1[idx], update_for_save, [tmp1[idx], tmp2[idx]])
             #cv2.setMouseCallback('gray', update_for_save, ['gray', gray])
+            # add cv2 image page button & button-text
+            tmp2[idx][button[0]:button[1], button[2]:button[3]] = 255
+            cv2.putText(tmp2[idx], 'Save', (5, 25), cv2.FONT_HERSHEY_PLAIN, 2, (0), 2)
 
         if img_show == True:
             for idx in range(len(tmp1)):
