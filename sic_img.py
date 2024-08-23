@@ -112,7 +112,7 @@ if __name__ == '__main__':
         tmp1 = ["gray","gray1","gray2","gray3","gray4","gray5"]
         tmp2 = [gray, gray1, gray2, gray3, gray4, gray5]
         for idx in range(len(tmp1)):
-            cv2.namedWindow(tmp1[idx],  cv2.WINDOW_NORMAL)
+            cv2.namedWindow(tmp1[idx],  cv2.WINDOW_NORMAL| cv2.WINDOW_KEEPRATIO)
             cv2.setMouseCallback(tmp1[idx], update_for_save, [tmp1[idx], tmp2[idx]])
             #cv2.setMouseCallback('gray', update_for_save, ['gray', gray])
             # add cv2 image page button & button-text
