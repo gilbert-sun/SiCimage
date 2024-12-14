@@ -40,16 +40,17 @@ def update_for_save(event, x, y, flags, params):
 
 # 定義調整亮度對比的函式
 def adjust(i, c, b):
-    # global window_name
-    #print(type(i),type(c), type(b))
-    output = i * (c/100 + 1) - c + b    # 轉換公式
+    global window_name
+    print("----------1------------> ",type(i),i.size,i.shape,i,c, b)
+    output = i * (c/100 +1) - c + b    # 轉換公式
     output = np.clip(output, 0, 255)
     output = np.uint8(output)
     cv2.imshow(window_name , output)
 
 # 定義調整threshold的函式
 def adjust1(i,a):
-    global gthreshold
+    global gthreshold,window_name
+    print("----------2------------> ",type(i),i.size,i.shape,i,a)
     output = i * (a+ 1) -a     # 轉換公式
     output = np.clip(output, 0, 255)
     output = np.uint8(output)
@@ -60,16 +61,16 @@ def adjust1(i,a):
 # 定義調整亮度函式
 def brightness_fn(val):
     global gray,output1,output4, contrast, brightness,threshold , window_name
-    brightness = val - 100
-    keydict={"gray":gray,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
+    brightness = val - 0
+    keydict={"gray":gray}#,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
     adjust(keydict[window_name], contrast, brightness)
 
 
 # 定義調整對比度函式
 def contrast_fn(val):
     global gray,output1, output4 ,contrast, brightness,threshold   , window_name
-    contrast = val - 100
-    keydict={"gray":gray,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
+    contrast = val - 0
+    keydict={"gray":gray}#,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
     adjust(keydict[window_name], contrast, brightness)
 
 
@@ -77,13 +78,13 @@ def contrast_fn(val):
 def threshold_fn(val):
     global gray,output1, output4 ,contrast, brightness,threshold   , window_name
     threshold = val - 0
-    keydict={"gray":gray,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
+    keydict={"gray":gray}#,"gray1":gray1,"gray2":gray2,"gray3":gray3,"gray4":gray4,"gray5":gray5}
     adjust1(keydict[window_name], threshold)
 
 
 if __name__ == '__main__':
     global gray, output1, output2, output3, output4, output5
-    all_img = glob('/home/k900/Documents/wind-turbine-project/20240729/CREE_0322_141.png')
+    all_img = glob('/media/k900/SP UFD U3/KOH_SiC_121124/single_new_afterKOH/3_7_0d.bmp')#/home/k900/Documents/wind-turbine-project/20240729/CREE_0322_141.png')
     dd =  "/20240729/output10_threshold_24/"
     cur_dir = os.getcwd()
     img_save = False#True
@@ -102,15 +103,15 @@ if __name__ == '__main__':
         oimg1 = oimg.split("/")[-1:][0]
 
         gray = cv2.imread(oimg,cv2.IMREAD_GRAYSCALE)#/home/k900/Pictures/123.png')
-        ret, gray1 = cv2.threshold(gray, thresVal, 255, cv2.THRESH_BINARY_INV)
-        gray2 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
-        gray3 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 2)
-        gray4 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-        gray5 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+        #ret, gray1 = cv2.threshold(gray, thresVal, 255, cv2.THRESH_BINARY_INV)
+        # gray2 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+        # gray3 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+        # gray4 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+        # gray5 = cv2.adaptiveThreshold(gray, thresVal, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
 
 
-        tmp1 = ["gray","gray1","gray2","gray3","gray4","gray5"]
-        tmp2 = [gray, gray1, gray2, gray3, gray4, gray5]
+        tmp1 = ["gray"]#,"gray1","gray2","gray3","gray4","gray5"]
+        tmp2 = [gray]#, gray1, gray2, gray3, gray4, gray5]
         for idx in range(len(tmp1)):
             cv2.namedWindow(tmp1[idx],  cv2.WINDOW_NORMAL| cv2.WINDOW_KEEPRATIO)
             cv2.setMouseCallback(tmp1[idx], update_for_save, [tmp1[idx], tmp2[idx]])
@@ -126,20 +127,20 @@ if __name__ == '__main__':
 
         if img_save == True:
             cv2.imwrite(cur_dir1 + oimg1.split(".")[0]+'_gray.png', gray)
-            cv2.imwrite(cur_dir1 + oimg1.split(".")[0]+'_output1.png', gray1)
-            cv2.imwrite(cur_dir1 + oimg1.split(".")[0]+'_output4.png', gray4)
+            # cv2.imwrite(cur_dir1 + oimg1.split(".")[0]+'_output1.png', gray1)
+            # cv2.imwrite(cur_dir1 + oimg1.split(".")[0]+'_output4.png', gray4)
 
         contrast = 0  # 初始化要調整對比度的數值
         brightness = 0  # 初始化要調整亮度的數值
         threshold = 0 # 初始化要調整threshold的數值
 
         for idx in tmp1 :
-            cv2.createTrackbar('brightness', idx, 0, 200, brightness_fn)  # 加入亮度調整滑桿
-            cv2.setTrackbarPos('brightness', idx, 100)
-            cv2.createTrackbar('contrast', idx, 0, 200, contrast_fn)      # 加入對比度調整滑桿
-            cv2.setTrackbarPos('contrast', idx, 100)
-            cv2.createTrackbar('threshold', idx, 0, 100, threshold_fn)      # 加入threshold調整滑桿
-            cv2.setTrackbarPos('threshold', idx, 20)
+            cv2.createTrackbar('brightness', idx, 0, 255, brightness_fn)  # 加入亮度調整滑桿
+            cv2.setTrackbarPos('brightness', idx, 0)
+            cv2.createTrackbar('contrast', idx, 0, 255, contrast_fn)      # 加入對比度調整滑桿
+            cv2.setTrackbarPos('contrast', idx, 0)
+            cv2.createTrackbar('threshold', idx, 0, 255, threshold_fn)      # 加入threshold調整滑桿
+            cv2.setTrackbarPos('threshold', idx, 0)
 
         hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
         plt.figure()
